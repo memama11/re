@@ -1,0 +1,599 @@
+/* styles/kitchen-responsive.css */
+/* Responsive CSS สำหรับระบบครัว (kitchen.html) */
+
+/* ==================== */
+/* Large Devices (Desktop) */
+/* ==================== */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .bills-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==================== */
+/* Medium Devices (Tablets) */
+/* ==================== */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .bills-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .kitchen-header .container {
+        flex-wrap: wrap;
+    }
+    
+    .kitchen-nav {
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
+        justify-content: center;
+    }
+}
+
+/* ==================== */
+/* Small Tablets */
+/* ==================== */
+@media (max-width: 991px) and (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .bills-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .kitchen-header .container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .kitchen-header .logo {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .kitchen-header .logo .subtitle {
+        display: none;
+    }
+    
+    .kitchen-nav {
+        width: 100%;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    .nav-btn .btn-text {
+        font-size: 0.8rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .bill-filters-container {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* ==================== */
+/* Mobile Devices */
+/* ==================== */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 15px;
+        max-width: 100%;
+    }
+    
+    /* Header */
+    .kitchen-header {
+        padding: 10px 0;
+    }
+    
+    .kitchen-header .container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .kitchen-header .logo {
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+    
+    .kitchen-header .logo h1 {
+        font-size: 1.2rem;
+        line-height: 1.3;
+    }
+    
+    .kitchen-header .logo .subtitle {
+        display: none;
+    }
+    
+    .kitchen-nav {
+        width: 100%;
+        justify-content: space-between;
+        gap: 5px;
+    }
+    
+    .nav-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 5px;
+        font-size: 0.7rem;
+    }
+    
+    .nav-btn .btn-text {
+        display: none;
+    }
+    
+    .nav-btn i {
+        margin: 0;
+        font-size: 1rem;
+    }
+    
+    /* Main Content */
+    .kitchen-main {
+        padding: 1rem 0;
+    }
+    
+    /* Section Header */
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn .btn-text {
+        display: none;
+    }
+    
+    .btn {
+        padding: 10px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+    }
+    
+    /* Bill Filters */
+    .bill-filters-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .filters-label {
+        font-size: 0.9rem;
+    }
+    
+    .bill-filters {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+    
+    .bill-filters .filter-btn {
+        padding: 6px 8px;
+        font-size: 0.7rem;
+        justify-content: center;
+    }
+    
+    .bill-filters .filter-btn i {
+        display: none;
+    }
+    
+    /* Products Grid */
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .kitchen-product-card {
+        max-width: 100%;
+    }
+    
+    .kitchen-product-image-container {
+        height: 140px;
+    }
+    
+    .kitchen-product-name {
+        font-size: 1rem;
+    }
+    
+    .kitchen-product-price {
+        font-size: 1.1rem;
+    }
+    
+    .kitchen-product-description {
+        font-size: 0.85rem;
+    }
+    
+    .kitchen-product-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    /* Bill Card */
+    .bill-card {
+        padding: 1rem;
+        margin-bottom: 15px;
+    }
+    
+    .bill-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .bill-info {
+        width: 100%;
+    }
+    
+    .bill-status {
+        align-self: flex-start;
+    }
+    
+    .customer-info {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .bill-items h4 {
+        font-size: 0.9rem;
+    }
+    
+    .bill-item {
+        font-size: 0.85rem;
+    }
+    
+    .bill-total {
+        font-size: 1rem;
+    }
+    
+    .bill-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .bill-actions .action-btn {
+        width: 100%;
+    }
+    
+    /* Back to Customer Button */
+    .back-to-customer {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .btn-customer .btn-text {
+        display: none;
+    }
+    
+    .btn-customer {
+        padding: 10px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        justify-content: center;
+    }
+    
+    .btn-customer i {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+        max-height: 90vh;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .image-preview {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+/* ==================== */
+/* Extra Small Mobile Devices */
+/* ==================== */
+@media (max-width: 480px) {
+    .kitchen-header .logo h1 {
+        font-size: 1rem;
+    }
+    
+    .kitchen-header .logo i {
+        font-size: 1.2rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1rem;
+    }
+    
+    .kitchen-product-image-container {
+        height: 120px;
+    }
+    
+    .kitchen-product-status {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+    
+    .bill-filters {
+        grid-template-columns: 1fr;
+    }
+    
+    .bill-filters .filter-btn:nth-child(3) {
+        grid-column: span 1;
+    }
+    
+    .back-to-customer {
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    .btn-customer {
+        width: 45px;
+        height: 45px;
+        padding: 8px;
+    }
+    
+    .image-preview {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .image-preview i {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==================== */
+/* Landscape Mode สำหรับมือถือ (Kitchen) */
+/* ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .kitchen-header {
+        padding: 5px 0;
+    }
+    
+    .kitchen-header .logo h1 {
+        font-size: 1rem;
+    }
+    
+    .kitchen-main {
+        padding: 0.8rem 0;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .kitchen-product-image-container {
+        height: 100px;
+    }
+    
+    .kitchen-product-info {
+        padding: 0.8rem;
+    }
+    
+    .modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    
+    .back-to-customer {
+        bottom: 10px;
+        left: 10px;
+    }
+}
+
+/* ==================== */
+/* Touch Device Optimizations (Kitchen) */
+/* ==================== */
+@media (hover: none) and (pointer: coarse) {
+    .nav-btn,
+    .action-btn,
+    .filter-btn,
+    .btn,
+    .btn-customer,
+    .close-modal {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .kitchen-product-actions .action-btn {
+        min-height: 44px;
+    }
+    
+    .form-input,
+    .search-input {
+        font-size: 16px; /* ป้องกัน zoom บน iOS */
+    }
+    
+    .modal-overlay {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ==================== */
+/* Dark Mode Support (Kitchen) */
+/* ==================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --kitchen-bg: #1a1a1a;
+        --kitchen-card-bg: #2d2d2d;
+        --kitchen-text-primary: #ffffff;
+        --kitchen-text-secondary: #b0b0b0;
+        --kitchen-border-color: #404040;
+        --kitchen-light: #333333;
+    }
+    
+    .kitchen-product-card,
+    .bill-card,
+    .modal-content {
+        background-color: var(--kitchen-card-bg);
+        color: var(--kitchen-text-primary);
+    }
+    
+    .kitchen-product-description,
+    .customer-info {
+        color: var(--kitchen-text-secondary);
+    }
+    
+    .form-input {
+        background-color: var(--kitchen-card-bg);
+        color: var(--kitchen-text-primary);
+        border-color: var(--kitchen-border-color);
+    }
+    
+    .bill-filters .filter-btn {
+        background-color: var(--kitchen-card-bg);
+        color: var(--kitchen-text-primary);
+        border-color: var(--kitchen-border-color);
+    }
+    
+    .bill-filters .filter-btn.active {
+        background-color: var(--kitchen-secondary);
+        color: white;
+    }
+}
+
+/* ==================== */
+/* Print Styles (Kitchen) */
+/* ==================== */
+@media print {
+    .kitchen-header,
+    .back-to-customer,
+    .btn,
+    .modal-overlay,
+    .kitchen-product-actions,
+    .bill-actions,
+    .nav-btn,
+    .section-header .btn {
+        display: none !important;
+    }
+    
+    .kitchen-body {
+        background-color: white;
+        color: black;
+        font-size: 12pt;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .products-grid,
+    .bills-container {
+        break-inside: avoid;
+    }
+    
+    .kitchen-product-card,
+    .bill-card {
+        break-inside: avoid;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+    
+    @page {
+        margin: 1cm;
+    }
+}
+
+/* ==================== */
+/* Accessibility Improvements (Kitchen) */
+/* ==================== */
+@media (prefers-reduced-motion: reduce) {
+    .kitchen-product-card,
+    .bill-card,
+    .modal-content {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ==================== */
+/* High Contrast Mode (Kitchen) */
+/* ==================== */
+@media (prefers-contrast: high) {
+    .nav-btn,
+    .action-btn,
+    .filter-btn,
+    .btn {
+        border-width: 2px;
+    }
+    
+    .kitchen-product-card,
+    .bill-card {
+        border-width: 2px;
+    }
+}
+
+/* ==================== */
+/* สำหรับผู้ที่ต้องการตัวหนังสือใหญ่ (Kitchen) */
+/* ==================== */
+@media (prefers-reduced-data: reduce) {
+    .kitchen-product-image,
+    .image-preview {
+        display: none;
+    }
+    
+    .kitchen-product-image-container {
+        display: none;
+    }
+}

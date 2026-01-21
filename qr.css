@@ -1,0 +1,169 @@
+/* QR Code Modal Styles */
+
+.payment-modal .modal-header {
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem 1.5rem;
+}
+
+.payment-modal .close-modal {
+    color: white;
+}
+
+.payment-modal .close-modal:hover {
+    color: #f1c40f;
+}
+
+.payment-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.payment-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.payment-details p {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.payment-details strong {
+    color: #2c3e50;
+}
+
+.payment-status {
+    background-color: #e8f4fc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-left: 4px solid #3498db;
+}
+
+.payment-status i {
+    font-size: 3rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+}
+
+.payment-status h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.payment-status p {
+    color: #7f8c8d;
+    margin-bottom: 0;
+}
+
+/* Payment Status Variations */
+.payment-success {
+    background-color: #d5f4e6;
+    border-left-color: #27ae60;
+}
+
+.payment-success i {
+    color: #27ae60;
+}
+
+.payment-failed {
+    background-color: #fadbd8;
+    border-left-color: #e74c3c;
+}
+
+.payment-failed i {
+    color: #e74c3c;
+}
+
+.payment-timeout {
+    background-color: #fef9e7;
+    border-left-color: #f39c12;
+}
+
+.payment-timeout i {
+    color: #f39c12;
+}
+
+/* QR Code Container */
+.qr-code-container {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.qr-code-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.qr-code-image {
+    width: 250px;
+    height: 250px;
+    border: 10px solid white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.qr-code-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.qr-code-overlay i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.qr-code-overlay p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.qr-instruction {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Payment Modal Buttons */
+.payment-modal .modal-footer {
+    background-color: #f8f9fa;
+    border-radius: 0 0 10px 10px;
+}
+
+/* Responsive QR Code */
+@media (max-width: 576px) {
+    .qr-code-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .payment-status {
+        padding: 1rem;
+    }
+    
+    .payment-status i {
+        font-size: 2.5rem;
+    }
+}

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบครัว - จัดการอาหารและบิล</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍🍳</text></svg>">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles/kitchen-main.css">
+    <link rel="stylesheet" href="styles/kitchen-responsive.css">
+    <link rel="stylesheet" href="styles/kitchen-modals.css">
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    
+    <!-- CSS Animation Styles -->
+    <style>
+        /* Animation for notifications */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Loading Spinner */
+        #global-loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-overlay {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .loading-text {
+            color: #333;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Modal Animation */
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-overlay {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-content {
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        /* ตั้งค่าเริ่มต้นซ่อน loading */
+        .products-loading,
+        .bills-loading {
+            display: none;
+        }
+        
+        .products-grid:empty + .products-loading,
+        .bills-container:empty + .bills-loading {
+            display: block;
+        }
+    </style>
+</head>
+<body class="kitchen-body">
+    <!-- Loading Spinner -->
+    <div id="global-loading">
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">กำลังโหลด...</div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header kitchen-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <h1>ระบบครัว</h1>
+                <span class="subtitle">วิทยาลัยอาชีวศึกษาลำปาง</span>
+            </div>
+            <nav class="kitchen-nav">
+                <button class="nav-btn active" id="productsBtn">
+                    <i class="fas fa-list"></i> 
+                    <span class="btn-text">รายการสินค้า</span>
+                </button>
+                <button class="nav-btn" id="billsBtn">
+                    <i class="fas fa-receipt"></i> 
+                    <span class="btn-text">บิล</span>
+                </button>
+                <button class="nav-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> 
+                    <span class="btn-text">ออกจากระบบ</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content kitchen-main">
+        <div class="container">
+            <!-- Products Section -->
+            <section class="kitchen-section active" id="productsSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> จัดการรายการสินค้า</h2>
+                    <button class="btn btn-primary" id="addProductBtn">
+                        <i class="fas fa-plus"></i> <span class="btn-text">เพิ่มสินค้า</span>
+                    </button>
+                </div>
+                
+                <!-- Product Form Modal -->
+                <div class="modal-overlay" id="productModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <i class="fas fa-utensils"></i>
+                                <h3><span id="modalTitle">เพิ่มสินค้าใหม่</span></h3>
+                            </div>
+                            <button class="close-modal" id="closeProductModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="productForm">
+                                <div class="form-group">
+                                    <label for="productName" class="form-label">
+                                        <i class="fas fa-tag"></i> ชื่อสินค้า
+                                    </label>
+                                    <input type="text" id="productName" class="form-input" required placeholder="กรุณากรอกชื่อสินค้า">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productDescription" class="form-label">
+                                        <i class="fas fa-align-left"></i> คำอธิบาย
+                                    </label>
+                                    <textarea id="productDescription" class="form-input" rows="3" placeholder="กรุณากรอกคำอธิบายสินค้า"></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="productPrice" class="form-label">
+                                            <i class="fas fa-money-bill-wave"></i> ราคา (บาท)
+                                        </label>
+                                        <input type="number" id="productPrice" class="form-input" min="0" step="0.01" required placeholder="0.00">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="productCategory" class="form-label">
+                                            <i class="fas fa-filter"></i> หมวดหมู่
+                                        </label>
+                                        <select id="productCategory" class="form-input" required>
+                                            <option value="food">อาหารจานหลัก</option>
+                                            <option value="appetizer">อาหารว่าง</option>
+                                            <option value="dessert">ของหวาน</option>
+                                            <option value="drink">เครื่องดื่ม</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productImage" class="form-label">
+                                        <i class="fas fa-image"></i> รูปภาพสินค้า
+                                    </label>
+                                    <input type="file" id="productImage" class="form-input" accept="image/*">
+                                    <div class="image-preview-container">
+                                        <div class="image-preview" id="imagePreview">
+                                            <i class="fas fa-image"></i>
+                                            <p>ยังไม่มีรูปภาพ</p>
+                                        </div>
+                                        <div class="image-hint">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>เลือกรูปภาพ JPG, PNG หรือ GIF ขนาดไม่เกิน 5MB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="productAvailable" checked>
+                                        <span class="checkbox-text">
+                                            <i class="fas fa-check-circle"></i>
+                                            สินค้ามีในสต็อก
+                                        </span>
+                                    </label>
+                                </div>
+                                
+                                <input type="hidden" id="productId">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="cancelProduct">
+                                <i class="fas fa-times"></i> ยกเลิก
+                            </button>
+                            <button type="submit" form="productForm" class="btn btn-primary" id="saveProduct">
+                                <i class="fas fa-save"></i> บันทึกสินค้า
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid-container">
+                    <div class="products-grid" id="productsGrid">
+                        <!-- รายการสินค้าจะแสดงที่นี่โดย JavaScript -->
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div class="products-loading">
+                        <div class="loading-spinner"></div>
+                        <p>กำลังโหลดรายการสินค้า...</p>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div class="empty-state" id="productsEmptyState">
+                        <i class="fas fa-utensils"></i>
+                        <h3>ยังไม่มีสินค้า</h3>
+                        <p>เพิ่มสินค้าแรกของคุณโดยคลิกปุ่ม "เพิ่มสินค้า"</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bills Section -->
+            <section class="kitchen-section" id="billsSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-receipt"></i> จัดการบิล</h2>
+                    <div class="bill-filters-container">
+                        <div class="filters-label">
+                            <i class="fas fa-filter"></i>
+                            <span>สถานะ:</span>
+                        </div>
+                        <div class="bill-filters">
+                            <button class="filter-btn active" data-status="pending">
+                                <i class="fas fa-clock"></i> รอดำเนินการ
+                            </button>
+                            <button class="filter-btn" data-status="preparing">
+                                <i class="fas fa-clock"></i> กำลังจัดเตรียม
+                            </button>
+                            <button class="filter-btn" data-status="completed">
+                                <i class="fas fa-check-circle"></i> เสร็จสิ้น
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bills List -->
+                <div class="bills-container" id="billsContainer">
+                    <!-- รายการบิลจะแสดงที่นี่โดย JavaScript -->
+                </div>
+                
+                <!-- Loading State -->
+                <div class="bills-loading">
+                    <div class="loading-spinner"></div>
+                    <p>กำลังโหลดรายการบิล...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Order Completion Modal -->
+    <div class="modal-overlay" id="completionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>ยืนยันการเสร็จสิ้น</h3>
+                </div>
+                <button class="close-modal" id="closeCompletionModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="completion-message">
+                    <i class="fas fa-question-circle"></i>
+                    <div class="message-content">
+                        <h4>คุณต้องการยืนยันว่าบิลหมายเลข <span id="billNumber"></span> เสร็จสิ้นแล้วใช่หรือไม่?</h4>
+                        <p>ระบบจะแจ้งเตือนไปยังลูกค้าที่สั่งอาหาร</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelCompletion">
+                    <i class="fas fa-times"></i> ยกเลิก
+                </button>
+                <button class="btn btn-primary" id="confirmCompletion">
+                    <i class="fas fa-check"></i> ยืนยันเสร็จสิ้น
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Customer View -->
+    <div class="back-to-customer">
+        <button class="btn-customer" id="backToCustomer">
+            <i class="fas fa-users"></i>
+            <span class="btn-text">กลับไปหน้าลูกค้า</span>
+        </button>
+    </div>
+    <!-- JavaScript Modules -->
+    <script type="module" src="../app/firebase-config.js"></script>
+    <script type="module" src="../kitchen/firebase-service-v2.js"></script>
+    <script type="module" src="../kitchen/kitchenmain.js"></script>
+
+    <!-- JavaScript Imports -->
+    <script type="module">
+        // Import Firebase config and services
+        import firebaseService from './firebase-service-v2.js';
+        
+        // Import the main kitchen app
+        import '../kitchen/kitchen-main.js';
+        
+        // ฟังก์ชันเริ่มต้นเมื่อโหลดหน้า
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 Kitchen page loaded');
+            
+            // ตั้งค่าเริ่มต้น: ซ่อน loading states
+            const productsEmptyState = document.getElementById('productsEmptyState');
+            const productsLoading = document.querySelector('.products-loading');
+            const billsLoading = document.querySelector('.bills-loading');
+            
+            if (productsEmptyState) productsEmptyState.style.display = 'none';
+            if (productsLoading) productsLoading.style.display = 'block';
+            if (billsLoading) billsLoading.style.display = 'block';
+            
+            // Debug helper
+            window.getKitchenStatus = function() {
+                return {
+                    loaded: !!window.kitchenApp,
+                    initialized: window.kitchenApp ? window.kitchenApp.isInitialized : false,
+                    currentSection: window.kitchenApp ? window.kitchenApp.currentSection : 'N/A',
+                    currentShop: window.kitchenApp ? window.kitchenApp.currentShop : 'N/A'
+                };
+            };
+            
+            // Test function
+            window.testKitchen = async function() {
+                console.log('Testing kitchen app connection...');
+                
+                if (window.kitchenApp) {
+                    console.log('Kitchen app is loaded:', window.kitchenApp);
+                    
+                    // แสดง loading state สำหรับการทดสอบ
+                    const productsGrid = document.getElementById('productsGrid');
+                    const billsContainer = document.getElementById('billsContainer');
+                    
+                    if (productsGrid) {
+                        productsGrid.innerHTML = `
+                            <div class="kitchen-product-card">
+                                <div class="kitchen-product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                         alt="ทดสอบ" 
+                                         class="kitchen-product-image">
+                                    <div class="kitchen-product-status status-available">พร้อมจำหน่าย</div>
+                                </div>
+                                <div class="kitchen-product-info">
+                                    <div class="kitchen-product-header">
+                                        <h3 class="kitchen-product-name">ผัดไทย</h3>
+                                        <span class="kitchen-product-price">60.00 บาท</span>
+                                    </div>
+                                    <p class="kitchen-product-description">ผัดไทยสูตรดั้งเดิม</p>
+                                    <div class="kitchen-product-meta">
+                                        <span class="kitchen-product-category">อาหารจานหลัก</span>
+                                        <span class="kitchen-product-shop">ป้าสี</span>
+                                    </div>
+                                    <div class="kitchen-product-actions">
+                                        <button class="action-btn edit-btn">
+                                            <i class="fas fa-edit"></i> แก้ไข
+                                        </button>
+                                        <button class="action-btn delete-btn">
+                                            <i class="fas fa-trash"></i> ลบ
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // ซ่อน loading
+                        if (productsLoading) productsLoading.style.display = 'none';
+                        if (productsEmptyState) productsEmptyState.style.display = 'none';
+                    }
+                    
+                    if (billsContainer) {
+                        billsContainer.innerHTML = `
+                            <div class="bill-card">
+                                <div class="bill-header">
+                                    <div class="bill-info">
+                                        <div class="bill-number">บิล #TEST001</div>
+                                        <div class="bill-shop">ร้าน: ป้าสี</div>
+                                    </div>
+                                    <div class="bill-status status-pending">รอดำเนินการ</div>
+                                </div>
+                                
+                                <div class="bill-details">
+                                    <div class="customer-info">
+                                        <div class="info-row">
+                                            <i class="fas fa-user"></i>
+                                            <span>ลูกค้า: ลูกค้าทดสอบ</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <i class="fas fa-table"></i>
+                                            <span>โต๊ะ: 1</span>
+                                        </div>
+                                        <div class="info-row">
+                                            <i class="fas fa-clock"></i>
+                                            <span>เวลา: 12:00</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bill-items">
+                                        <h4><i class="fas fa-list"></i> รายการอาหาร</h4>
+                                        <div class="bill-item">
+                                            <span class="item-name">1x ผัดไทย</span>
+                                            <span class="item-price">60.00 บาท</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bill-total">
+                                        <span>ยอดรวม:</span>
+                                        <span class="total-amount">60.00 บาท</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="bill-actions">
+                                    <button class="action-btn prepare-btn">
+                                        <i class="fas fa-clock"></i> เริ่มเตรียม
+                                    </button>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> ดูรายละเอียด
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // ซ่อน loading
+                        if (billsLoading) billsLoading.style.display = 'none';
+                    }
+                    
+                    return true;
+                }
+                
+                console.log('Kitchen app is not loaded yet');
+                return false;
+            };
+            
+            // ตรวจสอบการเข้าถึงครัว
+            const checkKitchenAccess = () => {
+                const kitchenAccess = sessionStorage.getItem('kitchenAccess');
+                console.log('🔐 Kitchen access status:', kitchenAccess);
+                
+                if (!kitchenAccess || kitchenAccess !== 'granted') {
+                    console.log('⚠️ No kitchen access, redirecting to login...');
+                    window.location.href = 'index.html';
+                }
+            };
+            
+            // ตรวจสอบทันทีเมื่อโหลดหน้า
+            checkKitchenAccess();
+            
+            // ตรวจสอบทุก 30 วินาที
+            setInterval(checkKitchenAccess, 30000);
+            
+            // ถ้า app ยังไม่โหลดหลังจาก 5 วินาที แสดงข้อความ
+            setTimeout(() => {
+                if (!window.kitchenApp || !window.kitchenApp.isInitialized) {
+                    console.warn('⚠️ Kitchen app not initialized after timeout');
+                    
+                    // แสดงข้อมูลตัวอย่าง
+                    window.testKitchen().then(success => {
+                        if (success) {
+                            console.log('✅ Test data loaded successfully');
+                        }
+                    });
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

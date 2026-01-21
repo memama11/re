@@ -1,0 +1,758 @@
+
+/* Main CSS File สำหรับระบบครัว */
+
+/* Reset และ Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Primary Colors สำหรับครัว */
+    --kitchen-primary: #1a252f;
+    --kitchen-secondary: #3498db;
+    --kitchen-accent: #e74c3c;
+    --kitchen-success: #2ecc71;
+    --kitchen-warning: #f39c12;
+    --kitchen-danger: #e74c3c;
+    
+    /* Neutral Colors */
+    --kitchen-light: #ecf0f1;
+    --kitchen-dark: #2c3e50;
+    --kitchen-gray: #95a5a6;
+    
+    /* Background Colors */
+    --kitchen-bg: #ecf0f1;
+    --kitchen-card-bg: #ffffff;
+    --kitchen-modal-bg: rgba(0, 0, 0, 0.7);
+    
+    /* Text Colors */
+    --kitchen-text-primary: #2c3e50;
+    --kitchen-text-secondary: #7f8c8d;
+    --kitchen-text-light: #ffffff;
+    
+    /* Borders */
+    --kitchen-border-radius: 8px;
+    --kitchen-border-color: #ddd;
+    
+    /* Shadows */
+    --kitchen-shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --kitchen-shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --kitchen-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3);
+    
+    /* Fonts */
+    --kitchen-font-heading: 'Kanit', sans-serif;
+    --kitchen-font-body: 'Sarabun', sans-serif;
+}
+
+.kitchen-body {
+    font-family: var(--kitchen-font-body);
+    color: var(--kitchen-text-primary);
+    background-color: var(--kitchen-bg);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header สำหรับครัว */
+.kitchen-header {
+    background-color: var(--kitchen-primary);
+    color: var(--kitchen-text-light);
+    padding: 1rem 0;
+    box-shadow: var(--kitchen-shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.kitchen-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.kitchen-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kitchen-header .logo i {
+    font-size: 1.8rem;
+    color: var(--kitchen-secondary);
+}
+
+.kitchen-header .logo h1 {
+    font-family: var(--kitchen-font-heading);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.kitchen-header .logo .subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+}
+
+/* Navigation สำหรับครัว */
+.kitchen-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--kitchen-text-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--kitchen-font-heading);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.active {
+    background-color: var(--kitchen-secondary);
+    border-color: var(--kitchen-secondary);
+}
+
+.nav-btn .btn-text {
+    font-size: 0.9rem;
+}
+
+/* Main Content สำหรับครัว */
+.kitchen-main {
+    padding: 2rem 0;
+}
+
+/* Kitchen Sections */
+.kitchen-section {
+    display: none;
+}
+
+.kitchen-section.active {
+    display: block;
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-header h2 {
+    font-family: var(--kitchen-font-heading);
+    font-size: 1.5rem;
+    color: var(--kitchen-text-primary);
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Buttons สำหรับครัว */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--kitchen-font-heading);
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: var(--kitchen-secondary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Products Grid */
+.products-grid-container {
+    position: relative;
+    min-height: 200px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.products-loading,
+.bills-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--kitchen-text-secondary);
+}
+
+.products-loading .loading-spinner,
+.bills-loading .loading-spinner {
+    margin: 0 auto 15px;
+}
+
+/* Kitchen Product Card */
+.kitchen-product-card {
+    background-color: var(--kitchen-card-bg);
+    border-radius: var(--kitchen-border-radius);
+    overflow: hidden;
+    box-shadow: var(--kitchen-shadow-sm);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid var(--kitchen-border-color);
+}
+
+.kitchen-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--kitchen-shadow-lg);
+}
+
+.kitchen-product-image-container {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+}
+
+.kitchen-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: var(--kitchen-light);
+}
+
+.kitchen-product-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-available {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.status-unavailable {
+    background-color: #fadbd8;
+    color: #e74c3c;
+}
+
+.kitchen-product-info {
+    padding: 1.2rem;
+}
+
+.kitchen-product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+}
+
+.kitchen-product-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--kitchen-text-primary);
+    flex: 1;
+}
+
+.kitchen-product-price {
+    font-weight: bold;
+    color: var(--kitchen-accent);
+    font-size: 1.2rem;
+    white-space: nowrap;
+}
+
+.kitchen-product-description {
+    color: var(--kitchen-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.kitchen-product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.kitchen-product-category {
+    background-color: var(--kitchen-light);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--kitchen-text-secondary);
+}
+
+.kitchen-product-shop {
+    background-color: var(--kitchen-secondary);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.kitchen-product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--kitchen-font-heading);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s;
+}
+
+.edit-btn {
+    background-color: var(--kitchen-secondary);
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #2980b9;
+}
+
+.delete-btn {
+    background-color: var(--kitchen-danger);
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Bills Container */
+.bills-container {
+    position: relative;
+    min-height: 200px;
+}
+
+/* Bill Filters */
+.bill-filters-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filters-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--kitchen-text-primary);
+}
+
+.bill-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.bill-filters .filter-btn {
+    padding: 6px 12px;
+    border: 2px solid var(--kitchen-secondary);
+    background-color: white;
+    color: var(--kitchen-secondary);
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--kitchen-font-heading);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.bill-filters .filter-btn.active,
+.bill-filters .filter-btn:hover {
+    background-color: var(--kitchen-secondary);
+    color: white;
+}
+
+/* Bill Card */
+.bill-card {
+    background-color: var(--kitchen-card-bg);
+    border-radius: var(--kitchen-border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--kitchen-shadow-sm);
+    margin-bottom: 20px;
+    border: 1px solid var(--kitchen-border-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.bill-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--kitchen-shadow-md);
+}
+
+.bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--kitchen-border-color);
+}
+
+.bill-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bill-number {
+    font-weight: bold;
+    color: var(--kitchen-text-primary);
+    font-size: 1.1rem;
+}
+
+.bill-shop {
+    font-size: 0.8rem;
+    color: var(--kitchen-text-secondary);
+}
+
+.bill-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.status-preparing {
+    background-color: #e8f4fc;
+    color: var(--kitchen-secondary);
+}
+
+.status-completed {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.bill-details {
+    margin-bottom: 1.5rem;
+}
+
+.customer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--kitchen-light);
+    border-radius: var(--kitchen-border-radius);
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.info-row i {
+    color: var(--kitchen-secondary);
+    width: 16px;
+}
+
+.bill-items {
+    margin-bottom: 1rem;
+}
+
+.bill-items h4 {
+    font-family: var(--kitchen-font-heading);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--kitchen-light);
+}
+
+.bill-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.item-price {
+    font-weight: 500;
+    color: var(--kitchen-text-primary);
+}
+
+.bill-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--kitchen-border-color);
+}
+
+.total-amount {
+    color: var(--kitchen-accent);
+}
+
+.bill-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+}
+
+.bill-actions .action-btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.prepare-btn {
+    background-color: var(--kitchen-warning);
+    color: white;
+}
+
+.prepare-btn:hover {
+    background-color: #e67e22;
+}
+
+.complete-btn {
+    background-color: var(--kitchen-success);
+    color: white;
+}
+
+.complete-btn:hover {
+    background-color: #27ae60;
+}
+
+.view-btn {
+    background-color: var(--kitchen-gray);
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #7f8c8d;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--kitchen-text-secondary);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--kitchen-gray);
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-family: var(--kitchen-font-heading);
+    margin-bottom: 0.5rem;
+    color: var(--kitchen-text-primary);
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+}
+
+/* Back to Customer Button */
+.back-to-customer {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.btn-customer {
+    padding: 12px 20px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--kitchen-font-heading);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--kitchen-shadow-lg);
+    transition: all 0.3s;
+}
+
+.btn-customer:hover {
+    background-color: #8e44ad;
+    transform: translateY(-3px);
+}
+
+.btn-customer .btn-text {
+    font-size: 0.9rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--kitchen-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--kitchen-border-color);
+    border-radius: 4px;
+    font-family: var(--kitchen-font-body);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--kitchen-secondary);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.image-preview-container {
+    margin-top: 0.5rem;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    border: 1px dashed var(--kitchen-border-color);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    background-color: var(--kitchen-light);
+}
+
+.image-preview i {
+    font-size: 2rem;
+    color: var(--kitchen-gray);
+    margin-bottom: 0.5rem;
+}
+
+.image-preview p {
+    font-size: 0.8rem;
+    color: var(--kitchen-text-secondary);
+    margin: 0;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.image-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--kitchen-text-secondary);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--kitchen-text-primary);
+}
+
+/* Hide elements initially */
+.hidden {
+    display: none !important;
+}
